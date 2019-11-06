@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 
 //creating server with express
@@ -5,16 +6,18 @@ const app = express()
 
 //json(), send() functions are from express
 app.get('/', (request,response)=>{
-    response.json({
-        name: "suhana"
-    })
+    response.sendFile(path.resolve(__dirname, 'index.html')) //send file requires the full path, path.resolve helps us get it
 })
 
 app.get('/about', (request,response)=>{
-    response.send({
-        name: "suhana"
-    })
+    response.sendFile(path.resolve(__dirname, 'about.html')) //send file requires the full path, path.resolve helps us get it
 })
+
+app.get('/contact', (request,response)=>{
+    response.sendFile(path.resolve(__dirname, 'contact.html')) //send file requires the full path, path.resolve helps us get it
+})
+
+
 
 app.listen(3000, () =>{
     console.log('App listening on port 3000')
