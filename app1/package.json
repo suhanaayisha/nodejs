@@ -1,0 +1,22 @@
+{
+  "name": "app1",
+  "version": "1.0.0",
+  "description": "build app using nodejs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suhanaayisha/nodejs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/suhanaayisha/nodejs/issues"
+  },
+  "homepage": "https://github.com/suhanaayisha/nodejs#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
