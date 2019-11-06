@@ -4,6 +4,8 @@ const express = require('express')
 //creating server with express
 const app = express()
 
+app.use(express.static('public'))
+
 //json(), send() functions are from express
 app.get('/', (request,response)=>{
     response.sendFile(path.resolve(__dirname, 'index.html')) //send file requires the full path, path.resolve helps us get it
