@@ -1,4 +1,9 @@
 const http = require('http') //grabs http package and store it in a variable called http
+const fs = require('fs') //file system module
+
+const aboutPage = fs.readFileSync('about.html')
+const contactPage = fs.readFileSync('contact.html')
+const homePage = fs.readFileSync('index.html')
 
 //create server
 //createServer function takes in function as a parameter, that will be executed whenthe server is created
@@ -7,11 +12,11 @@ const server= http.createServer((request,response)=>{
     console.log(request.url)
 
     if (request.url === '/about'){
-        return response.end('The about page')
+        return response.end(aboutPage)
     } else if (request.url === '/contact'){
-        return response.end('The contact page')
+        return response.end(contactPage)
     } else if (request.url === '/'){
-        return response.end('The home page')
+        return response.end(homePage)
     } else {
         response.writeHead(404)
         response.end('Not found')
