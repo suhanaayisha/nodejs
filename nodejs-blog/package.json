@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/suhanaayisha/nodejs#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-edge": "^2.0.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
