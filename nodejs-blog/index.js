@@ -1,8 +1,11 @@
 const path = require('path')
 const express = require('express')
 const { config, engine } = require('express-edge'); //for templating
+const mongoose = require('mongoose')
 
 const app = new express()
+
+mongoose.connect('mongodb://localhost/node-js-blog')
 
 
 app.use(express.static('public')) // use helps us add functionality to express
