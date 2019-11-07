@@ -16,20 +16,20 @@ app.get('/', (request, response) => {
     // response.sendFile(path.resolve(__dirname, 'pages/index.html'))
 })
 
-app.get('/index.html', (request, response) => {
-    response.sendFile(path.resolve(__dirname, 'pages/index.html'))
+app.get('/index', (request, response) => {
+    response.render('index')
 })
 
-app.get('/about.html', (request, response) => {
-    response.sendFile(path.resolve(__dirname, 'pages/about.html'))
+app.get('/about', (request, response) => {
+    response.render('about')
 })
 
-app.get('/contact.html', (request, response) => {
-    response.sendFile(path.resolve(__dirname, 'pages/contact.html'))
+app.get('/contact', (request, response) => {
+    response.render('contact')
 })
 
-app.get('/post.html', (request, response) => {
-    response.sendFile(path.resolve(__dirname, 'pages/contact.html'))
+app.get('/post', (request, response) => {
+    response.render('post')
 })
 
 app.listen(4000,() => {
