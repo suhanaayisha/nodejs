@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const PostSchema = new mongoose.Schema({
     title: String,
     description: String,
-    contents: String
+    content: String
 })
 
 //creating Post model, this is what is going to be communicating with db
