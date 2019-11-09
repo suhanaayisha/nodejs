@@ -34,13 +34,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
-router.get('/getData', (req, res) => {
-    Data.find((err, data) => {
-      if (err) return res.json({ success: false, error: err });
-      return res.json({ success: true, data: data });
-    });
-});
-
 
 router.get('/getUserData', async (req, res) => {
   const users = await userData.find((err, data) => {
@@ -66,13 +59,6 @@ router.get('/getBidData', async (req, res) => {
   console.log(requests)
 });
 
-  // router.post('/updateData', (req, res) => {
-  //   const { id, update } = req.body;
-  //   Data.findByIdAndUpdate(id, update, (err) => {
-  //     if (err) return res.json({ success: false, error: err });
-  //     return res.json({ success: true });
-  //   });
-  // });
 
   router.post('/updateBidData', (req, res) => {
     const { id, update } = req.body;
@@ -83,33 +69,6 @@ router.get('/getBidData', async (req, res) => {
   });
 
 
-  // router.delete('/deleteData', (req, res) => {
-  //   const { id } = req.body;
-  //   Data.findByIdAndRemove(id, (err) => {
-  //     if (err) return res.send(err);
-  //     return res.json({ success: true });
-  //   });
-  // });
-
-  router.post('/putData', (req, res) => {
-    console.log("coming here")
-    let data = new Data();
-  
-    const { id, message } = req.body;
-  
-    if ((!id && id !== 0) || !message) {
-      return res.json({
-        success: false,
-        error: 'INVALID INPUTS',
-      });
-    }
-    data.message = message;
-    data.id = id;
-    data.save((err) => {
-      if (err) return res.json({ success: false, error: err });
-      return res.json({ success: true });
-    });
-  });
 
   router.post('/putUserData', (req, res) => {
     // console.log("coming here")
