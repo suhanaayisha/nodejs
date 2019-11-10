@@ -36,6 +36,7 @@ export default class SignUp extends React.Component {
 
     putDataToDB = (e) => {
         e.preventDefault();
+        this.setState({passwordMatch: true})
         let username =e.target.elements.username.value;
         let password1 =e.target.elements.password1.value;
         let password2 =e.target.elements.password2.value;
@@ -93,11 +94,11 @@ export default class SignUp extends React.Component {
                 <h2>Sign Up</h2>
                 <form onSubmit={this.putDataToDB} ref={form => this.form = form}>
                     <label>Username</label>
-                    <input type="text" name="username" onChange={this.onUserChange}></input>
+                    <input type="text" name="username" onChange={this.onUserChange} required></input>
                     <label>Password</label>
-                    <input type="password" name="password1"></input>
+                    <input type="password" name="password1" required></input>
                     <label>Confirm Password</label>
-                    <input type="password" name="password2" onChange={this.onPassChange}></input>
+                    <input type="password" name="password2" onChange={this.onPassChange} required></input>
                     <label>Type of User:</label>
                     <select name="users" name="usertype">
                         <option value="contractor">Contractor</option>
@@ -107,7 +108,7 @@ export default class SignUp extends React.Component {
                 </form>
                 { this.componentDidUpdate() }
                 {  this.state.usernameExists ?  <p>Username Exists</p> : ""} 
-                {  this.state.passwordMatch ? " " : <p>Passwords do not match</p>}  
+                {  this.state.passwordMatch ? <p></p> : <p>Passwords do not match</p>}  
                 {  this.state.successfulSubmission ? 
                     <div> 
                         <div>Sign up successful.</div> 
