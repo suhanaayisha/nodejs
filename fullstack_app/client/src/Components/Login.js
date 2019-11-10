@@ -7,7 +7,9 @@ export default class Login extends React.Component {
         super(props);
         this.state = {
             isFetching: false,
-            users: []
+            users: [],
+            userExists: true,
+            passwordMatch: true,
         };
     }
 
@@ -27,7 +29,12 @@ export default class Login extends React.Component {
 
 
     onSubmit = (e) => {
+        this.setState({userExists: true}); 
+        this.setState({passwordMatch: true}); 
         e.preventDefault();
+        this.setState({userExists: true});
+        this.setState({passwordMatch: true});
+        
         let username =e.target.elements.username.value;
         let password =e.target.elements.password.value;
         const users = this.state.users;
@@ -51,12 +58,14 @@ export default class Login extends React.Component {
                     }
                 }
                 else{
-                    console.log("Username and password does not match");
+                    this.setState({passwordMatch: false}); 
+                    return false;
                 }
                 
                } 
             else {
-                console.log("User doesn't exists. Show error message");
+                this.setState({userExists: false}); 
+                return false;
                }
                 
         } 
@@ -70,6 +79,10 @@ export default class Login extends React.Component {
         // }
     };
 
+    componentDidUpdate(prevProps, prevState){
+    
+    }
+
     render(){
         
         return(
@@ -79,9 +92,12 @@ export default class Login extends React.Component {
                     <label>Username</label>
                     <input type="text" name="username"></input>
                     <label>Password</label>
-                    <input type="text" name="password"></input>
+                    <input type="password" name="password"></input>
                     <button>Login</button>
                 </form>
+                { this.componentDidUpdate() }
+                {  this.state.userExists ?  <p></p> : <p>User Does Not Exist. Please Sign Up</p>} 
+                {  this.state.passwordMatch ? <p></p> : <p> Username and Password does not match</p>} 
                 <NavLink to='/signup' activeClassName='is-active' exact={true}>Sign up</NavLink> 
     
             </div>
