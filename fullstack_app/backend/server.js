@@ -34,6 +34,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
+router.get('/getData', (req, res) => {
+    Data.find((err, data) => {
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true, data: data });
+    });
+});
+
 
 router.get('/getUserData', async (req, res) => {
   const users = await userData.find((err, data) => {
@@ -48,7 +55,7 @@ router.get('/getRequestData', async (req, res) => {
       if (err) return res.json({ success: false, error: err });
       return res.json({ success: true, data: data });
     });
-  console.log(requests)
+  // console.log(requests)
 });
 
 router.get('/getBidData', async (req, res) => {
@@ -56,7 +63,7 @@ router.get('/getBidData', async (req, res) => {
       if (err) return res.json({ success: false, error: err });
       return res.json({ success: true, data: data });
     });
-  console.log(requests)
+  // console.log(requests)
 });
 
 
@@ -68,7 +75,44 @@ router.get('/getBidData', async (req, res) => {
     });
   });
 
+router.delete('/deleteRequestData', (req, res) => {
+    const { id } = req.body;
+    console.log("reaches here")
+    // console.log(requestData.findById(id))
+    requestData.findByIdAndRemove(id, (err) => {
+      if (err) return res.send(err);
+      return res.json({ success: true });
+    });
+  });
 
+router.post('/deleteBidData', (req, res) => {
+    const { id } = req.body;
+    bidData.findByIdAndRemove(id, (err) => {
+      if (err) return res.send(err);
+      return res.json({ success: true });
+    });
+  });
+
+
+  router.post('/putData', (req, res) => {
+    console.log("coming here")
+    let data = new Data();
+  
+    const { id, message } = req.body;
+  
+    if ((!id && id !== 0) || !message) {
+      return res.json({
+        success: false,
+        error: 'INVALID INPUTS',
+      });
+    }
+    data.message = message;
+    data.id = id;
+    data.save((err) => {
+      if (err) return res.json({ success: false, error: err });
+      return res.json({ success: true });
+    });
+  });
 
   router.post('/putUserData', (req, res) => {
     // console.log("coming here")
@@ -90,9 +134,9 @@ router.get('/getBidData', async (req, res) => {
     // console.log("coming here")
     let data = new requestData();
   
-    const {  userid, equip, quantity } = req.body;
-  
-    data.userid= userid
+    const {  userid, username, equip, quantity } = req.body;
+    data.username= username;
+    data.userid= userid;
     data.equip = equip;
     data.quantity = quantity;
     data.save((err) => {

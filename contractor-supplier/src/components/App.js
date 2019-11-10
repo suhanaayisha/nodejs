@@ -39,7 +39,8 @@ export default class App extends React.Component {
                     <Supplier /> :
                     null
                  }
-
+                ]
+                
             </div>
         );
     }

@@ -6,7 +6,8 @@ export default class Supplier extends React.Component {
     state = {
         data: [],
         biddata: [],
-        userid: null,
+        userid: this.props.location.state.userid,
+        username: this.props.location.state.username,
         name: null,
         quantity: null,
         intervalIsSet: false,
@@ -16,10 +17,10 @@ export default class Supplier extends React.Component {
     componentDidMount() {
         this.getDataFromDb();
         this.getBidDataFromDb();
-        if (!this.state.intervalIsSet) {
-          let interval = setInterval(this.getDataFromDb, 1000);
-          this.setState({ intervalIsSet: interval });
-        }
+        // if (!this.state.intervalIsSet) {
+        //   let interval = setInterval(this.getDataFromDb, 1000);
+        //   this.setState({ intervalIsSet: interval });
+        // }
     }
     componentWillUnmount() {
         if (this.state.intervalIsSet) {
@@ -50,35 +51,33 @@ export default class Supplier extends React.Component {
             
             if (biddata.length > 0 && biddata.find(data => data.reqid === reqid)){ 
                     let data = biddata.find(data => data.reqid === reqid);
+                    console.log(data.price)
+                    console.log(price)
                     if (price < data.price){
-                        axios.post('http://localhost:3001/api/updateBidData', {
+                        axios.post('http://localhost:3001/api/deleteBidData', {
                             id: data._id,
-                            update: { price: price },
                         });
-                    }
-                    else {
+
+                        // axios.post('http://localhost:3001/api/putBidData', {
+          
+                        //     reqid: reqid,
+                        //     price: price
+                        // });
+                       }
+                    } else {
                         console.log("price is more than existing bid")
                     }
-                    
+
+                    axios.post('http://localhost:3001/api/putBidData', {
+                  
+                        reqid: reqid,
+                        price: price
+                    });
+                   }
                 }
-                
-            else {
-                axios.post('http://localhost:3001/api/putBidData', {
-          
-                    reqid: reqid,
-                    price: price
-                });
-               }
-                
-        } 
-
-        
-
-
-    };    
+                    
 
     render(){
-        console.log(this.state)
         const { data } = this.state;
         
         return(
@@ -86,12 +85,13 @@ export default class Supplier extends React.Component {
                 <NavLink to='/supplier' activeClassName='is-active' exact={true}>Home</NavLink> 
                 <NavLink to='/' activeClassName='is-active' exact={true}>Logout</NavLink> 
                 <NavLink to='/bid' activeClassName='is-active' exact={true}>Bids</NavLink> 
-                <h1>Supplier Home Page</h1>
+                <h1>Hello {this.state.username}</h1>
                 <ul>
                 {data.length <= 0
                     ? 'NO REQUESTS YET'
                     : data.map((dat) => (
                         <li style={{ padding: '10px' }} key={dat.id}>
+                        <span style={{ color: 'gray' }}> User Name: </span> {dat.username} <br />
                         <span style={{ color: 'gray' }}> Request Id: </span> {dat._id} <br />
                         <span style={{ color: 'gray' }}> Equipment: </span> {dat.equip} <br />
                         <span style={{ color: 'gray' }}> Quantity: </span>  {dat.quantity} <br />

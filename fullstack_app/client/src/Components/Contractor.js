@@ -7,6 +7,7 @@ export default class Contractor extends React.Component {
         data: [],
         userdata: [],
         userid: this.props.location.state.userid,
+        username: this.props.location.state.username,
         name: null,
         quantity: null,
         intervalIsSet: false
@@ -35,25 +36,35 @@ export default class Contractor extends React.Component {
     putDataToDB = (e) => {
         e.preventDefault();
         let userid=this.state.userid;
+        let username=this.state.username;
         let equip =e.target.elements.equip.value;
         let quantity =e.target.elements.quantity.value;
 
     
         axios.post('http://localhost:3001/api/putRequestData', {
             userid: userid,
+            username: username,
             equip: equip,
             quantity: quantity
         });
-    };    
+    }; 
+    
+    deleteReq = (reqid) => {
+        console.log(reqid)
+        axios.delete('http://localhost:3001/api/deleteRequestData', {
+            reqid: reqid,
+        });
+    }
+    
 
     render(){
         const { data } = this.state;
-        console.log(data)
+        // console.log(data)
         return(
             <div>
                 <NavLink to='/contractor' activeClassName='is-active' exact={true}>Home</NavLink> 
                 <NavLink to='/' activeClassName='is-active' exact={true}>Logout</NavLink> 
-                <h1>Contractor Home Page</h1>
+                <h1>Hello {this.state.username}</h1>
                 <h2>My Requests</h2>
                 <ul>
                 {data.length <= 0
@@ -61,12 +72,15 @@ export default class Contractor extends React.Component {
                     : data.map((dat) => {
                         if (dat.userid === this.state.userid){
                             return(
+                                <div>
                                 <li style={{ padding: '10px' }} key={dat.id}>
-                                <span style={{ color: 'gray' }}> User Name: </span> {dat.userid} <br />
+                                <span style={{ color: 'gray' }}> User Name: </span> {dat.username} <br />
                                 <span style={{ color: 'gray' }}> Request Id: </span> {dat._id} <br />
                                 <span style={{ color: 'gray' }}> Equipment: </span> {dat.equip} <br />
                                 <span style={{ color: 'gray' }}> Quantity: </span>  {dat.quantity} <br />
                                 </li>
+                                
+                                </div>
                                 )
                         }
                         else{

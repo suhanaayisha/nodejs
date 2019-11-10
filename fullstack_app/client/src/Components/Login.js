@@ -46,11 +46,11 @@ export default class Login extends React.Component {
                 if( users.find(user => user.username === username && user.password ===password )){
                     const user =  users.find(user => user.username === username)
                     if (user.usertype == "contractor"){
-                        this.props.history.push('/contractor',{ userid: user._id });
+                        this.props.history.push('/contractor',{ userid: user._id, username: user.username });
                         
                     }
                     else if (user.usertype == "supplier"){
-                        this.props.history.push('/supplier',{ userid: user._id });
+                        this.props.history.push('/supplier',{ userid: user._id, username: user.username });
                         
                     }
                     else{
