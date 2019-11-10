@@ -3,30 +3,84 @@ import axios from 'axios';
 import { NavLink} from 'react-router-dom';
 
 export default class SignUp extends React.Component {
-    state = {
-        data: [],
-        username: null,
-        password: null,
-        usertype: null,
-        intervalIsSet: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            username: null,
+            password: null,
+            usertype: null,
+            passwordMatch: true,
+            usernameExists: false,
+            intervalIsSet: false,
+            isFetching: false,
+            successfulSubmission: false
+        };
+        
+      }
+
+    componentDidMount() {
+        this.getDataFromDb();
+        // if (!this.state.intervalIsSet) {
+        //   let interval = setInterval(this.getDataFromDb, 1000);
+        //   this.setState({ intervalIsSet: interval });
+        // }
+    }
+
+    getDataFromDb = () => {
+        fetch('http://localhost:3001/api/getUserData')
+          .then((data) => data.json())
+          .then((res) => this.setState({ users: res.data, isFetching:true }));
       };
 
 
     putDataToDB = (e) => {
         e.preventDefault();
         let username =e.target.elements.username.value;
-        let password =e.target.elements.password.value;
+        let password1 =e.target.elements.password1.value;
+        let password2 =e.target.elements.password2.value;
         let usertype =e.target.elements.usertype.value;
-        console.log(username,password,usertype)
+        if(this.state.users.find((user) => user.username === username)){
+            return false;
+        }
+        if(password1 !== password2){
+            this.setState({passwordMatch: false})
+            return false; // The form won't submit
+        }
+        
+        if(this.state.isFetching){
+            if(!(this.state.users.find((user) => user.username === username)) && (password1 == password2) ){
+                axios.post('http://localhost:3001/api/putUserData', {
+                    username: username,
+                    password: password1,
+                    usertype: usertype
+                });
+                this.setState({successfulSubmission: true})
+                this.form.reset() 
+                
+            } 
+        
+        }
+    }
+
+    onUserChange = (e) => {
+        let username = e.target.value;
+        if(this.state.users.find((user) => user.username === username)){
+            this.setState({usernameExists: true})
+            console.log("username matches")
+        } else {
+            this.setState({usernameExists: false})
+        }
+
+    }
+
+
+    componentDidUpdate(prevProps, prevState){
+    
+        }
 
     
-      axios.post('http://localhost:3001/api/putUserData', {
-          username: username,
-          password: password,
-          usertype: usertype
-        });
-        this.props.history.push('/');
-      };
+      
 
     
     render(){
@@ -35,13 +89,15 @@ export default class SignUp extends React.Component {
         // console.log(users)
         return(
             <div>
-                <NavLink to='/' activeClassName='is-active' exact={true}>Home</NavLink> 
+                <NavLink to='/' activeClassName='is-active' exact={true}>Login</NavLink> 
                 <h2>Sign Up</h2>
-                <form onSubmit={this.putDataToDB}>
+                <form onSubmit={this.putDataToDB} ref={form => this.form = form}>
                     <label>Username</label>
-                    <input type="text" name="username"></input>
+                    <input type="text" name="username" onChange={this.onUserChange}></input>
                     <label>Password</label>
-                    <input type="text" name="password"></input>
+                    <input type="password" name="password1"></input>
+                    <label>Confirm Password</label>
+                    <input type="password" name="password2" onChange={this.onPassChange}></input>
                     <label>Type of User:</label>
                     <select name="users" name="usertype">
                         <option value="contractor">Contractor</option>
@@ -49,7 +105,17 @@ export default class SignUp extends React.Component {
                     </select>
                     <button>Sign Up</button>
                 </form>
-    
+                { this.componentDidUpdate() }
+                {  this.state.usernameExists ?  <p>Username Exists</p> : ""} 
+                {  this.state.passwordMatch ? " " : <p>Passwords do not match</p>}  
+                {  this.state.successfulSubmission ? 
+                    <div> 
+                        <div>Sign up successful.</div> 
+                        <NavLink to='/' activeClassName='is-active' exact={true}>Login Here</NavLink> 
+                    </div> 
+                    : 
+                    " " }
+                  
             </div>
         );
     }
